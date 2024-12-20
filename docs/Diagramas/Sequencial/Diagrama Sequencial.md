@@ -1,5 +1,3 @@
-## 1. Diagrama sequencial
-
 ```plantuml-svg
 @startuml
 
