@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+#  gateway:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.gateway
+#    ports:
+#      - "8000:8080"
+
+  authentication:
+    build:
+      context: ./authentication/
+      dockerfile: ./Dockerfile
+    container_name: authentication-service
+    environment:
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL_AUTH}
+      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME_AUTH}
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD_AUTH}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${SPRING_JPA_HIBERNATE_DDL_AUTO_AUTH}
+    ports:
+      - "8001:8080"
+    depends_on:
+      - auth_db
+    volumes:
+      - ./authentication:/app
+
+  auth_db:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB_AUTH}
+      POSTGRES_USER: ${POSTGRES_USER_AUTH}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD_AUTH}
+    ports:
+      - "5000:5432"
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+
+volumes:
+  auth_db_data:
