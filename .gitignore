@@ -1,0 +1,6 @@
+.env
+gateway/src/main/resources/application.yml
+sale/src/main/resources/application.properties
+inventory/src/main/resources/application.properties
+authentication/src/main/resource/application.yml
+

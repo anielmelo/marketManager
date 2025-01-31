@@ -1,0 +1,10 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/marketmanager
+          jwk-set-uri: http://localhost:8080/realms/marketmanager/protocol/open-id/certs
+
+server:
+  port: 8083
