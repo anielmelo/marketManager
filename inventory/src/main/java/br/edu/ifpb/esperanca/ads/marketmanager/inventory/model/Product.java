@@ -14,7 +14,11 @@ public class Product {
     private String name;
     private String brand;
     private Double cost;
+
+    @Column(name = "available_quantity", nullable = false)
     private int availableQuantity;
+
+    @Column(name = "total_quantity", nullable = false)
     private int totalQuantity;
 
     @ManyToOne
