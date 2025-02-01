@@ -7,14 +7,19 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_supplier", uniqueConstraints = { @UniqueConstraint(name = "uc_cnpj", columnNames = {"cnpj"})})
+@Table(name = "tb_supplier")
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(unique = true, nullable = false)
     private String cnpj;
+
+    @Column(nullable = false)
     private String address;
 
     @OneToMany(mappedBy = "supplier")
@@ -73,12 +78,12 @@ public class Supplier {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Supplier that = (Supplier) o;
-        return Objects.equals(id, that.id) && Objects.equals(cnpj, that.cnpj);
+        Supplier supplier = (Supplier) o;
+        return Objects.equals(cnpj, supplier.cnpj);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cnpj);
+        return Objects.hashCode(cnpj);
     }
 }
