@@ -1,5 +1,7 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class Supplier {
     private String address;
 
     @OneToMany(mappedBy = "supplier")
+    @JsonManagedReference
+    @JsonIgnore
     private List<Product> products = new ArrayList<>();
 
     public Supplier() {}

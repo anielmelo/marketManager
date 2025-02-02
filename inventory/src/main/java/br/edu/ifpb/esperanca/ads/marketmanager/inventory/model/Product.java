@@ -1,5 +1,6 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -23,10 +24,12 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "supplier_id")
+    @JsonBackReference
     private Supplier supplier;
 
     @ManyToOne
     @JoinColumn(name = "receiving_id")
+    @JsonBackReference
     private Receiving receiving;
 
     public Product() { }
@@ -90,19 +93,19 @@ public class Product {
         this.totalQuantity = totalQuantity;
     }
 
-    public Supplier getFornecedor() {
+    public Supplier getSupplier() {
         return supplier;
     }
 
-    public void setFornecedor(Supplier supplier) {
+    public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
 
-    public Receiving getRecebimento() {
+    public Receiving getReceiving() {
         return receiving;
     }
 
-    public void setRecebimento(Receiving receiving) {
+    public void setReceiving(Receiving receiving) {
         this.receiving = receiving;
     }
 
