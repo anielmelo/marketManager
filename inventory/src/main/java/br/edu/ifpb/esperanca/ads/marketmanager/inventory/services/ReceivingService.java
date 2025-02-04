@@ -23,13 +23,16 @@ public class ReceivingService {
         this.receivingRepository = receivingRepository;
     }
 
-    public void createReceiving(LocalDate date) {
+    public ReceivingResponseDTO createReceiving(LocalDate date) {
         log.info("Creating a new receiving record...");
 
         if (date.isAfter(LocalDate.now())) {throw new RuntimeException("Error");}
-        Receiving receiving = new Receiving(null, date);
+
+        Receiving receiving = new Receiving();
+        receiving.setDate(date);
         receivingRepository.save(receiving);
         log.info("Receiving record created successfully.");
+        return new ReceivingResponseDTO(receiving.getId(),receiving.getDate());
     }
 
     public ReceivingResponseDTO getReceivingById(Long id) {
@@ -46,14 +49,6 @@ public class ReceivingService {
                 .stream()
                 .map(r -> new ReceivingResponseDTO(r.getId(), r.getDate()))
                 .collect(Collectors.toList());
-    }
-
-    public void deleteReceiving(Long id) {
-        log.info("Deleting receiving record...");
-        Receiving receiving = receivingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Receiving record not found"));
-        receivingRepository.delete(receiving);
-        log.info("Receiving record deleted successfully.");
     }
 
 }
