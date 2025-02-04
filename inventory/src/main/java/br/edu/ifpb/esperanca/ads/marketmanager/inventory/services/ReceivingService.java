@@ -1,7 +1,7 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services;
 
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ReceivingResponseDTO;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.model.Receiving;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Receiving;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ReceivingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

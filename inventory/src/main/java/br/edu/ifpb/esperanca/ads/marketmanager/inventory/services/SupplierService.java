@@ -3,7 +3,7 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.SupplierRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.SupplierResponseDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.SupplierMapper;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.model.Supplier;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Supplier;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.SupplierRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

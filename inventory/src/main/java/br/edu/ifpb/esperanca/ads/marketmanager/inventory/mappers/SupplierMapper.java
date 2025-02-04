@@ -2,7 +2,7 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers;
 
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.SupplierRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.SupplierResponseDTO;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.model.Supplier;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Supplier;
 import org.springframework.stereotype.Component;
 
 @Component

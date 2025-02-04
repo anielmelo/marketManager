@@ -3,7 +3,7 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductResponseDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.ProductMapper;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.model.Product;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Product;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -83,6 +83,11 @@ public class ProductService {
     public void updateStockQuantity(Long productId, int quantity) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        if (product.getAvailableQuantity() - quantity < 0) {
+            throw new RuntimeException("Quantidade Insuficiente");
+        }
+
         product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
         productRepository.save(product);
     }
