@@ -56,7 +56,7 @@ public class ProductController {
         return ResponseEntity.ok(obj);
     }
 
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         log.info("Deleting product with ID: {}", id);
         productService.deleteProduct(id);
@@ -65,7 +65,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestParam int quantity) {
+    public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody Integer quantity) {
         log.info("Updating stock for product ID: {} with quantity: {}", id, quantity);
         productService.updateStockQuantity(id, quantity);
         log.info("Stock updated successfully for product ID: {}", id);
