@@ -2,6 +2,7 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.controllers;
 
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductResponseDTO;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.StockUpdateRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.ProductService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -65,9 +66,9 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/stock")
-    public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody Integer quantity) {
-        log.info("Updating stock for product ID: {} with quantity: {}", id, quantity);
-        productService.updateStockQuantity(id, quantity);
+    public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody StockUpdateRequestDTO dto) {
+        log.info("Updating stock for product ID: {} with quantity: {}", id, dto.quantity());
+        productService.updateStockQuantity(id, dto.quantity());
         log.info("Stock updated successfully for product ID: {}", id);
         return ResponseEntity.ok().build();
     }
