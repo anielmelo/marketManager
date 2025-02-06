@@ -33,7 +33,10 @@ public class ProductService {
         log.info("Registering a new product...");
         validateProduct(dto);
 
-        Product product = productMapper.toEntity(dto);
+        var supplier = supplierService.findSupplierEntity(dto.supplierId());
+        var receiving = receivingService.findReceivingEntity(dto.receivingId());
+
+        Product product = productMapper.toEntity(dto, supplier, receiving);
         log.info("Product successfully registered!");
 
         productRepository.save(product);
@@ -67,50 +70,52 @@ public class ProductService {
 
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
         log.info("Updating product with id: {}", id);
+
         var existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Error: Product not found"));
 
+        var supplier = supplierService.findSupplierEntity(dto.supplierId());
+        var receiving = receivingService.findReceivingEntity(dto.receivingId());
+
         validateProduct(dto);
 
-        Product updatedProduct = productMapper.toEntity(dto);
+        Product updatedProduct = productMapper.toEntity(dto, supplier, receiving);
         updatedProduct.setId(existingProduct.getId());
 
         log.info("Product successfully updated!");
+
         productRepository.save(updatedProduct);
         return productMapper.toProductResponseDTO(updatedProduct);
     }
 
     public void updateStockQuantity(Long productId, int quantity) {
+        log.info("Attempting to update stock for Product ID: {} with quantity: {}", productId, quantity);
+
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> {
+                    log.warn("Product with ID {} not found!", productId);
+                    return new RuntimeException("Product not found");
+                });
+
+        log.info("Current stock for Product ID {}: {}", productId, product.getAvailableQuantity());
+
 
         if (product.getAvailableQuantity() - quantity < 0) {
+            log.error("Insufficient quantity! Available: {}, Requested: {}", product.getAvailableQuantity(), quantity);
             throw new RuntimeException("Quantidade Insuficiente");
         }
 
         product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
         productRepository.save(product);
+
+        log.info("Stock updated successfully for Product ID: {}. New stock: {}",
+                productId, product.getAvailableQuantity());
     }
 
     private void validateProduct(ProductRequestDTO dto) {
-        if (dto.availableQuantity() < 1 && dto.totalQuantity() < 1) {
+        if (dto.availableQuantity() < 1) {
             log.warn("Attempt to register a product with quantities less than or equal to 0");
             throw new RuntimeException("Cannot register a product with quantities less than or equal to 0");
-        }
-
-        if (!dto.availableQuantity().equals(dto.totalQuantity())) {
-            log.warn("Attempt to register a product where total and available quantities are different");
-            throw new RuntimeException("Cannot register a product where the total and available quantities are different");
-        }
-
-        if (supplierService.getSupplierById(dto.supplierId().getId()) == null) {
-            log.warn("Attempt to create a product with a non-existent supplier. Supplier ID: {}", dto.supplierId().getId());
-            throw new RuntimeException("Cannot create a product without a valid supplier ID.");
-        }
-
-        if (receivingService.getReceivingById(dto.receivingId().getId()) == null) {
-            log.warn("Attempt to create a product with a non-existent receiving record. Receiving ID: {}", dto.receivingId().getId());
-            throw new RuntimeException("Cannot create a product without a valid receiving ID.");
         }
     }
 }
