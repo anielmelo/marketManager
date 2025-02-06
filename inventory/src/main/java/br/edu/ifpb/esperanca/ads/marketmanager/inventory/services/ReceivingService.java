@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,10 +23,10 @@ public class ReceivingService {
         this.receivingRepository = receivingRepository;
     }
 
-    public ReceivingResponseDTO createReceiving(LocalDate date) {
+    public ReceivingResponseDTO createReceiving(LocalDateTime date) {
         log.info("Creating a new receiving record...");
 
-        if (date.isAfter(LocalDate.now())) {throw new RuntimeException("Error");}
+        if (date.isAfter(LocalDateTime.now())) {throw new RuntimeException("Error");}
 
         Receiving receiving = new Receiving();
         receiving.setDate(date);
@@ -35,10 +35,9 @@ public class ReceivingService {
         return new ReceivingResponseDTO(receiving.getId(),receiving.getDate());
     }
 
-    public ReceivingResponseDTO getReceivingById(Long id) {
+    public ReceivingResponseDTO getReceivingDtoById(Long id) {
         log.info("Fetching receiving with id: {}", id);
-        Receiving receiving = receivingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Receiving record not found"));
+        Receiving receiving = findReceivingEntity(id);
         log.info("Receiving record found.");
         return new ReceivingResponseDTO(receiving.getId(), receiving.getDate());
     }
@@ -51,4 +50,8 @@ public class ReceivingService {
                 .collect(Collectors.toList());
     }
 
+    protected Receiving findReceivingEntity(Long id) {
+        return receivingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receiving record not found"));
+    }
 }
