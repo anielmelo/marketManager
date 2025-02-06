@@ -9,7 +9,11 @@ import org.springframework.stereotype.Component;
 public class SupplierMapper {
 
     public Supplier toEntity(SupplierRequestDTO dto) {
-        return new Supplier(null, dto.name(), dto.cnpj(), dto.address());
+        Supplier supplier = new Supplier();
+        supplier.setName(dto.name());
+        supplier.setCnpj(dto.cnpj());
+        supplier.setAddress(dto.address());
+        return supplier;
     }
 
     public SupplierResponseDTO toDTO(Supplier supplier) {
