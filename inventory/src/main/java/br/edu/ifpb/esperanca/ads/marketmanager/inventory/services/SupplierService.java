@@ -42,8 +42,7 @@ public class SupplierService {
 
     public SupplierResponseDTO getSupplierById(Long id) {
         log.info("Fetching supplier with ID: {}", id);
-        Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        var supplier = findSupplierEntity(id);
         return supplierMapper.toDTO(supplier);
     }
 
@@ -57,8 +56,7 @@ public class SupplierService {
 
     public SupplierResponseDTO updateSupplier(Long id, SupplierRequestDTO dto) {
         log.info("Updating supplier with ID: {}", id);
-        Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        var supplier = findSupplierEntity(id);
 
         supplier.setName(dto.name());
         supplier.setCnpj(dto.cnpj());
@@ -72,10 +70,14 @@ public class SupplierService {
 
     public void deleteSupplier(Long id) {
         log.info("Deleting supplier with ID: {}", id);
-        Supplier supplier = supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+        Supplier supplier = findSupplierEntity(id);
 
         supplierRepository.delete(supplier);
         log.info("Supplier deleted successfully");
+    }
+
+    protected Supplier findSupplierEntity(Long id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Supplier not found"));
     }
 }
