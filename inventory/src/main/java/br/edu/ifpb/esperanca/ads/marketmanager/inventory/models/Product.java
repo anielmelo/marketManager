@@ -3,11 +3,12 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tb_product")
-public class Product {
+public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,28 +20,24 @@ public class Product {
     @Column(name = "available_quantity", nullable = false)
     private int availableQuantity;
 
-    @Column(name = "total_quantity", nullable = false)
-    private int totalQuantity;
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "supplier_id")
     @JsonBackReference
     private Supplier supplier;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "receiving_id")
     @JsonBackReference
     private Receiving receiving;
 
     public Product() { }
 
-    public Product(Long id, String name, String brand, Double cost, int availableQuantity, int totalQuantity, Supplier supplier, Receiving receiving) {
+    public Product(Long id, String name, String brand, Double cost, int availableQuantity, Supplier supplier, Receiving receiving) {
         this.id = id;
         this.name = name;
         this.brand = brand;
         this.cost = cost;
         this.availableQuantity = availableQuantity;
-        this.totalQuantity = totalQuantity;
         this.supplier = supplier;
         this.receiving = receiving;
     }
@@ -83,14 +80,6 @@ public class Product {
 
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
-    }
-
-    public int getTotalQuantity() {
-        return totalQuantity;
-    }
-
-    public void setTotalQuantity(int totalQuantity) {
-        this.totalQuantity = totalQuantity;
     }
 
     public Supplier getSupplier() {
