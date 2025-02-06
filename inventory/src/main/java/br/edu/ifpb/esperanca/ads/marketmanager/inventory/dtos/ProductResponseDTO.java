@@ -1,13 +1,10 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos;
 
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Receiving;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Supplier;
-
 public record ProductResponseDTO(
+        Long id,
         String name,
         String brand,
         Double cost,
         int availableQuantity,
-        int totalQuantity,
-        Supplier supplier,
-        Receiving receiving) { }
+        SupplierResponseDTO supplier,
+        ReceivingResponseDTO receiving) { }
