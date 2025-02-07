@@ -3,6 +3,8 @@ package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ReceivingResponseDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Receiving;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ReceivingRepository;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.receiving.DateNotAllowedException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.receiving.ReceivingNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,10 @@ public class ReceivingService {
     public ReceivingResponseDTO createReceiving(LocalDateTime date) {
         log.info("Creating a new receiving record...");
 
-        if (date.isAfter(LocalDateTime.now())) {throw new RuntimeException("Error");}
+        if (date.isAfter(LocalDateTime.now())) {
+            log.error("It is not possible to create a receiving with this date.");
+            throw new DateNotAllowedException();
+        }
 
         Receiving receiving = new Receiving();
         receiving.setDate(date);
@@ -52,6 +57,9 @@ public class ReceivingService {
 
     protected Receiving findReceivingEntity(Long id) {
         return receivingRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Receiving record not found"));
+                .orElseThrow(() -> {
+                    log.error("Receiving not found with ID: {}", id);
+                    return new ReceivingNotFoundException();
+                });
     }
 }

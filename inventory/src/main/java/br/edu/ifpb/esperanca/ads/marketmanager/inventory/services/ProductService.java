@@ -5,6 +5,9 @@ import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductResponseDTO
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.ProductMapper;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Product;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ProductRepository;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InsufficientQuantityException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InvalidProductQuantityException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.ProductNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +48,7 @@ public class ProductService {
 
     public ProductResponseDTO getProductById(Long id) {
         log.info("Searching for product with id: {}", id);
-        var product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Error: Product not found"));
+        var product = findProductById(id);
         log.info("Product found successfully.");
         return productMapper.toProductResponseDTO(product);
     }
@@ -61,8 +63,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         log.info("Deleting product...");
-        var product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Error: Product not found"));
+        var product = findProductById(id);
 
         log.info("Product successfully deleted.");
         productRepository.delete(product);
@@ -71,8 +72,7 @@ public class ProductService {
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
         log.info("Updating product with id: {}", id);
 
-        var existingProduct = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Error: Product not found"));
+        var existingProduct = findProductById(id);
 
         var supplier = supplierService.findSupplierEntity(dto.supplierId());
         var receiving = receivingService.findReceivingEntity(dto.receivingId());
@@ -91,18 +91,14 @@ public class ProductService {
     public void updateStockQuantity(Long productId, int quantity) {
         log.info("Attempting to update stock for Product ID: {} with quantity: {}", productId, quantity);
 
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> {
-                    log.warn("Product with ID {} not found!", productId);
-                    return new RuntimeException("Product not found");
-                });
+        Product product = findProductById(productId);
 
         log.info("Current stock for Product ID {}: {}", productId, product.getAvailableQuantity());
 
 
         if (product.getAvailableQuantity() - quantity < 0) {
             log.error("Insufficient quantity! Available: {}, Requested: {}", product.getAvailableQuantity(), quantity);
-            throw new RuntimeException("Quantidade Insuficiente");
+            throw new InvalidProductQuantityException();
         }
 
         product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
@@ -115,7 +111,15 @@ public class ProductService {
     private void validateProduct(ProductRequestDTO dto) {
         if (dto.availableQuantity() < 1) {
             log.warn("Attempt to register a product with quantities less than or equal to 0");
-            throw new RuntimeException("Cannot register a product with quantities less than or equal to 0");
+            throw new InsufficientQuantityException();
         }
+    }
+
+    protected Product findProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.error("Product not found with ID: {}", id);
+                    return new ProductNotFoundException();
+                });
     }
 }

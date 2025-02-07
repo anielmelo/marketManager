@@ -5,6 +5,8 @@ import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.SupplierResponseDT
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.SupplierMapper;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Supplier;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.SupplierRepository;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.supplier.SupplierAlreadyExistsException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.supplier.SupplierNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class SupplierService {
 
         if (supplierRepository.existsByCnpj(dto.cnpj())) {
             log.error("Supplier with CNPJ {} already exists", dto.cnpj());
-            throw new RuntimeException("Supplier with this CNPJ already exists.");
+            throw new SupplierAlreadyExistsException();
         }
 
         Supplier supplier = supplierMapper.toEntity(dto);
@@ -78,6 +80,9 @@ public class SupplierService {
 
     protected Supplier findSupplierEntity(Long id) {
         return supplierRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
+                .orElseThrow(() -> {
+                    log.error("Supplier Entity not found with ID: {}", id);
+                    return new SupplierNotFoundException();
+                });
     }
 }
