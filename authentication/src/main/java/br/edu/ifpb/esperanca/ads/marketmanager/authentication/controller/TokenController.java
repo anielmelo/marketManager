@@ -12,28 +12,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import br.edu.ifpb.esperanca.ads.marketmanager.authentication.dto.GetUserDTO;
+import br.edu.ifpb.esperanca.ads.marketmanager.authentication.dto.TokenDTO;
 
-@RequestMapping("/auth")
 @RestController
-public class UserController {
+@RequestMapping("/auth")
+public class TokenController {
     
     @PostMapping("/token")
-    public ResponseEntity<String> token(@RequestBody GetUserDTO user) {
+    public ResponseEntity<String> token(@RequestBody TokenDTO tokenDto) {
 
         HttpHeaders headers = new HttpHeaders();
         RestTemplate rt = new RestTemplate();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
         MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-        data.add("client_id", user.clientId());
-        data.add("username", user.username());
-        data.add("password", user.password());
-        data.add("grant_type", user.grantType());
+        data.add("client_id", tokenDto.clientId());
+        data.add("username", tokenDto.username());
+        data.add("password", tokenDto.password());
+        data.add("grant_type", tokenDto.grantType());
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(data, headers);
 
-        var result = rt.postForEntity("http://localhost:8080/realms/marketmanager/protocol/openid-connect/token", entity, String.class);
+        var result = rt.postForEntity("http://localhost:8080/realms/marketmanager/protocol/openid-connect/token",
+                entity, String.class);
 
         return result;
     }
