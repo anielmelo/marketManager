@@ -19,8 +19,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeExchange(authorize -> authorize
                         .pathMatchers(HttpMethod.POST, "/**").permitAll()
-                        .anyExchange().permitAll()
-                );
+                        .anyExchange().permitAll());
         return http.build();
     }
 }
