@@ -1,9 +1,12 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,21 +28,20 @@ public class Product implements Serializable {
     @JsonBackReference
     private Supplier supplier;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "receiving_id")
-    @JsonBackReference
-    private Receiving receiving;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Replacement> replacements;
 
     public Product() { }
 
-    public Product(Long id, String name, String brand, Double cost, int availableQuantity, Supplier supplier, Receiving receiving) {
+    public Product(Long id, String name, String brand, Double cost, int availableQuantity, Supplier supplier, List<Replacement> replacements) {
         this.id = id;
         this.name = name;
         this.brand = brand;
         this.cost = cost;
         this.availableQuantity = availableQuantity;
         this.supplier = supplier;
-        this.receiving = receiving;
+        this.replacements = replacements;
     }
 
     public Long getId() {
@@ -90,12 +92,12 @@ public class Product implements Serializable {
         this.supplier = supplier;
     }
 
-    public Receiving getReceiving() {
-        return receiving;
+    public List<Replacement> getReplacement() {
+        return replacements;
     }
 
-    public void setReceiving(Receiving receiving) {
-        this.receiving = receiving;
+    public void setReplacement(List<Replacement> replacements) {
+        this.replacements = replacements;
     }
 
     @Override

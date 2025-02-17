@@ -8,5 +8,5 @@ public record ProductRequestDTO(
         @NotBlank(message = "Brand can not be blank.") String brand,
         Double cost,
         @NotNull(message = "Available quantity can not be null.") Integer availableQuantity,
-        Long supplierId,
-        Long receivingId) { }
+        Long supplierId
+) { }
