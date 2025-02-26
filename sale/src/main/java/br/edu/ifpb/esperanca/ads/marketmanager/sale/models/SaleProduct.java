@@ -2,36 +2,32 @@ package br.edu.ifpb.esperanca.ads.marketmanager.sale.models;
 
 import jakarta.persistence.*;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
 
 @Entity
-public class SaleProduct {
-
+@Table(name = "tb_saleProduct")
+public class SaleProduct implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column( nullable = false)
     private Long productId;
+    @Column( nullable = false)
     private int quantity;
-    private BigDecimal price;
-    private BigDecimal total;
-    @ManyToOne
-    @JoinColumn(name = "sale_id")  //dúvida
+    private Double total;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 
     public SaleProduct() {
     }
 
-    public SaleProduct(Long id, Long productId, int quantity, BigDecimal price, Sale sale) {
-        this.id = id;
+    public SaleProduct(Long productId, int quantity, Sale sale, Double total) {
         this.productId = productId;
         this.quantity = quantity;
-        this.price = price;
         this.sale = sale;
-        this.total = calculateTotal();
-    }
-
-    private BigDecimal calculateTotal() {
-        return total = price.multiply(BigDecimal.valueOf(quantity));
+        this.total = total;
     }
 
     public Long getId() {
@@ -54,25 +50,23 @@ public class SaleProduct {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-        this.total = calculateTotal();
-    }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-        this.total = calculateTotal();
-    }
-
-    public BigDecimal getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
+
+    public Sale getSale() {
+        return sale;
+    }
+
+    public void setSale(Sale sale) {
+        this.sale = sale;
+    }
+
+
 }
