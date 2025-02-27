@@ -25,6 +25,9 @@ public class Supplier implements Serializable {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private String contact;
+
     @OneToMany(mappedBy = "supplier")
     @JsonManagedReference
     @JsonIgnore
@@ -32,11 +35,12 @@ public class Supplier implements Serializable {
 
     public Supplier() {}
 
-    public Supplier(Long id, String name, String cnpj, String address) {
+    public Supplier(Long id, String name, String cnpj, String address, String contact) {
         this.id = id;
         this.name = name;
         this.cnpj = cnpj;
         this.address = address;
+        this.contact = contact;
     }
 
     public Long getId() {
@@ -77,6 +81,14 @@ public class Supplier implements Serializable {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     @Override
