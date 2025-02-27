@@ -4,5 +4,6 @@ public record SupplierResponseDTO(
         Long id,
         String name,
         String cnpj,
-        String address
+        String address,
+        String contact
 ) {}

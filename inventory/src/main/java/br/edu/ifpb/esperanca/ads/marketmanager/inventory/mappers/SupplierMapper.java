@@ -13,6 +13,7 @@ public class SupplierMapper {
         supplier.setName(dto.name());
         supplier.setCnpj(dto.cnpj());
         supplier.setAddress(dto.address());
+        supplier.setContact(dto.contact());
         return supplier;
     }
 
@@ -21,6 +22,7 @@ public class SupplierMapper {
                 supplier.getId(),
                 supplier.getName(),
                 supplier.getCnpj(),
-                supplier.getAddress());
+                supplier.getAddress(),
+                supplier.getContact());
     }
 }

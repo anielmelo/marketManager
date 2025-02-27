@@ -11,8 +11,10 @@ import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.pro
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,15 +22,15 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final SupplierService supplierService;
-    private final ReceivingService receivingService;
+    private final ReplacementService replacementService;
     private final static Logger log = LoggerFactory.getLogger(ProductService.class);
     private final ProductMapper productMapper;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, SupplierService supplierService, ReceivingService receivingService, ProductMapper productMapper) {
+    public ProductService(ProductRepository productRepository, SupplierService supplierService, @Lazy ReplacementService replacementService, ProductMapper productMapper) {
         this.productRepository = productRepository;
         this.supplierService = supplierService;
-        this.receivingService = receivingService;
+        this.replacementService = replacementService;
         this.productMapper = productMapper;
     }
 
@@ -37,9 +39,8 @@ public class ProductService {
         validateProduct(dto);
 
         var supplier = supplierService.findSupplierEntity(dto.supplierId());
-        var receiving = receivingService.findReceivingEntity(dto.receivingId());
 
-        Product product = productMapper.toEntity(dto, supplier, receiving);
+        Product product = productMapper.toEntity(dto, supplier, new ArrayList<>());
         log.info("Product successfully registered!");
 
         productRepository.save(product);
@@ -75,11 +76,10 @@ public class ProductService {
         var existingProduct = findProductById(id);
 
         var supplier = supplierService.findSupplierEntity(dto.supplierId());
-        var receiving = receivingService.findReceivingEntity(dto.receivingId());
 
         validateProduct(dto);
 
-        Product updatedProduct = productMapper.toEntity(dto, supplier, receiving);
+        Product updatedProduct = productMapper.toEntity(dto, supplier, replacementService.findAllReplacements(id));
         updatedProduct.setId(existingProduct.getId());
 
         log.info("Product successfully updated!");
@@ -122,4 +122,14 @@ public class ProductService {
                     return new ProductNotFoundException();
                 });
     }
+
+    protected void increaseAvailableQuantity(Long id, int quantity) {
+        Product product = findProductById(id);
+
+        product.setAvailableQuantity(product.getAvailableQuantity() + quantity);
+
+        productRepository.save(product);
+    }
+
+
 }
