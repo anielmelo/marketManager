@@ -41,7 +41,7 @@ public class ProductMapper {
                         .stream()
                         .map(
                                 r -> new ReplacementResponseDTO(
-                                r.getId(), r.getDate(),
+                                r.getId(), r.getIdStockKeeper(), r.getDate(),
                                 r.getPurchaseValue(), r.getQuantityReceived()
                                 )).toList()
         );

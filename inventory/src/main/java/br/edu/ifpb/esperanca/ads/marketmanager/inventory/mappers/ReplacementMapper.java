@@ -15,10 +15,11 @@ public class ReplacementMapper {
     @Autowired
     private ProductMapper productMapper;
 
-    public Replacement toEntity(ReplacementRequestDTO dto, Product product) {
+    public Replacement toEntity(ReplacementRequestDTO dto, String idStockKeeper, Product product) {
         Replacement replacement = new Replacement();
 
         replacement.setDate(LocalDateTime.now());
+        replacement.setIdStockKeeper(idStockKeeper);
         replacement.setPurchaseValue(dto.totalPurchaseValue());
         replacement.setQuantityReceived(dto.quantityReceived());
         replacement.setProducts(product);
