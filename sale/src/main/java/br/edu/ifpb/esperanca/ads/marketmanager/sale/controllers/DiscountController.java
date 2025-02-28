@@ -2,15 +2,20 @@ package br.edu.ifpb.esperanca.ads.marketmanager.sale.controllers;
 
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.dtos.DiscountRequestDTO;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.dtos.DiscountResponseDTO;
+import br.edu.ifpb.esperanca.ads.marketmanager.sale.security.CustomJwtAuthenticationToken;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.DiscountService;
+import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.discount.AccessKeeperDeniedException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sales/discount")
+@RequestMapping("/sale/discount")
 public class DiscountController {
     private final DiscountService discountService;
 
@@ -20,7 +25,17 @@ public class DiscountController {
 
     @PostMapping
     public ResponseEntity<DiscountRequestDTO> addDiscount(@RequestBody DiscountRequestDTO dto) {
-        discountService.saveDiscount(dto);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (!(authentication instanceof CustomJwtAuthenticationToken)) {
+            throw new AccessKeeperDeniedException();
+        }
+
+        CustomJwtAuthenticationToken customToken = (CustomJwtAuthenticationToken) authentication;
+        String idSaleKeeper = customToken.getUserId();
+
+        discountService.saveDiscount(dto, idSaleKeeper);
+        
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

@@ -3,7 +3,6 @@ package br.edu.ifpb.esperanca.ads.marketmanager.sale.controllers.exceptions;
 
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.sale.SaleNotFoundException;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.saleproduct.InvalidProductIdException;
-import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.saleproduct.ResourceNotFoundException;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.saleproduct.SaleProductNotFoundException;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.sale.InvalidSaleOperationException;
 import jakarta.servlet.http.HttpServletRequest;
