@@ -28,7 +28,7 @@ public class DiscountService {
     }
 
     @Transactional
-    public DiscountResponseDTO saveDiscount(DiscountRequestDTO discountRequestDTO) {
+    public DiscountResponseDTO saveDiscount(DiscountRequestDTO discountRequestDTO, String idSaleKeeper) {
         if (discountRequestDTO == null) {
             throw new InvalidDiscountException();
         }
@@ -38,9 +38,12 @@ public class DiscountService {
         if (discountRequestDTO.minimumValue() <= 0) {
             throw new InvalidMinimumValueException();
         }
-        Discount discount = discountMapper.toEntity(discountRequestDTO);
+
+        Discount discount = discountMapper.toEntity(discountRequestDTO, idSaleKeeper);
+        
         discount.setActive(true); // Definir como ativo ao criar
         discount = discountRepository.save(discount);
+        
         return discountMapper.toDiscountResponseDTO(discount);
     }
 
@@ -48,17 +51,22 @@ public class DiscountService {
     public DiscountResponseDTO updateDiscount(Long id, DiscountRequestDTO discountRequestDTO) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new DiscountNotFoundException(id));
+        
         if (discountRequestDTO.value() <= 0) {
             throw new InvalidDiscountException();
         }
+        
         if (discountRequestDTO.minimumValue() <= 0) {
             throw new InvalidMinimumValueException(); // Verificação do minimumValue
         }
+        
         discount.setCode(discountRequestDTO.code());
         discount.setDescription(discountRequestDTO.description());
         discount.setValue(discountRequestDTO.value());
         discount.setMinimumValue(discountRequestDTO.minimumValue());
+
         discount = discountRepository.save(discount);
+        
         return discountMapper.toDiscountResponseDTO(discount);
     }
 
@@ -66,13 +74,16 @@ public class DiscountService {
     public void disableDiscount(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new DiscountNotFoundException(id));
+        
         discount.setActive(false);
+        
         discountRepository.save(discount);
     }
 
     public DiscountResponseDTO getDiscountById(Long id) {
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new DiscountNotFoundException(id));
+        
         return discountMapper.toDiscountResponseDTO(discount);
     }
 
@@ -90,14 +101,18 @@ public class DiscountService {
         if (id == null) {
             return totalValue; // Se o id for null, retorna o valor total sem desconto
         }
+
         Discount discount = discountRepository.findById(id)
                 .orElseThrow(() -> new DiscountNotFoundException(id));
+        
         if (!discount.getActive()) {
             throw new InvalidDiscountException();
         }
+        
         if (totalValue < discount.getMinimumValue()) {
             throw new InvalidDiscountException();
         }
+        
         // Aplica o desconto
         Double discountAmount = (discount.getValue() / 100) * totalValue;
         Double finalValue = totalValue - discountAmount;

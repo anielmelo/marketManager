@@ -11,7 +11,7 @@ import br.edu.ifpb.esperanca.ads.marketmanager.sale.repositories.SaleProductRepo
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.repositories.SaleRepository;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.sale.DuplicateProductException;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.saleproduct.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class SaleProductService {
     private final SaleRepository saleRepository;
     private final SaleProductRepository saleProductRepository;
-    private final DiscountService discountService; // Adicionamos o DiscountService
+    private final DiscountService discountService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final SaleProductMapper saleProductMapper;
     private final SaleMapper saleMapper;
@@ -38,8 +38,8 @@ public class SaleProductService {
 
     @Autowired
     public SaleProductService(SaleRepository saleRepository, SaleProductRepository saleProductRepository,
-                              SaleProductMapper saleProductMapper, SaleMapper saleMapper,
-                              DiscountService discountService,  DiscountRepository discountRepository) {
+            SaleProductMapper saleProductMapper, SaleMapper saleMapper,
+            DiscountService discountService, DiscountRepository discountRepository) {
         this.saleRepository = saleRepository;
         this.saleProductRepository = saleProductRepository;
         this.saleProductMapper = saleProductMapper;
@@ -69,7 +69,8 @@ public class SaleProductService {
         Set<Long> productIds = new HashSet<>();
         for (SaleProductRequestDTO product : saleProductRequestDTOS) {
             if (!productIds.add(product.productId())) {
-                throw new DuplicateProductException("O produto com ID " + product.productId() + " foi adicionado mais de uma vez.");
+                throw new DuplicateProductException(
+                        "O produto com ID " + product.productId() + " foi adicionado mais de uma vez.");
             }
         }
 
@@ -99,7 +100,7 @@ public class SaleProductService {
             // throw new DiscountNotFoundException("Desconto não encontrado.");
             sale.setDiscount(discount);
         } else {
-            sale.setDiscount(null);  // Caso o discountId seja null, não associa desconto
+            sale.setDiscount(null); // Caso o discountId seja null, não associa desconto
         }
 
         saleRepository.save(sale);
@@ -122,7 +123,8 @@ public class SaleProductService {
 
         // Recalcula o total da venda considerando o desconto
         double totalSemDesconto = sale.calcularTotal();
-        double totalComDesconto = discountService.applyDiscount(sale.getDiscount() != null ? sale.getDiscount().getId() : null, totalSemDesconto);
+        double totalComDesconto = discountService
+                .applyDiscount(sale.getDiscount() != null ? sale.getDiscount().getId() : null, totalSemDesconto);
 
         sale.setTotal(totalComDesconto);
         saleRepository.save(sale);
@@ -152,13 +154,21 @@ public class SaleProductService {
     }
 
     public ProductResponseDTO getProductFromInventory(Long productId) {
-        String url = "http://localhost:8082/api/products/" + productId;
+        String url = "http://localhost:8082/inventory/products/" + productId;
 
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                return new ObjectMapper().readValue(response.getBody(), ProductResponseDTO.class);
+                Map<String, Object> body = response.getBody();
+
+                // Constrói o ProductResponseDTO pegando apenas os atributos necessários
+                return new ProductResponseDTO(
+                        ((Number) body.get("id")).longValue(),
+                        (String) body.get("name"),
+                        (String) body.get("brand"),
+                        ((Number) body.get("cost")).doubleValue(),
+                        ((Number) body.get("availableQuantity")).intValue());
             } else {
                 throw new ExternalApiException("Produto com ID " + productId + " não encontrado no inventário.");
             }
@@ -169,4 +179,29 @@ public class SaleProductService {
             throw new ExternalApiException("Erro ao buscar produto na API de inventário: " + e.getMessage());
         }
     }
+
+    // public ProductResponseDTO getProductFromInventory(Long productId) {
+    // String url = "http://localhost:8082/inventory/products/" + productId;
+
+    // try {
+    // ResponseEntity<String> response = restTemplate.getForEntity(url,
+    // String.class);
+
+    // if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null)
+    // {
+    // return new ObjectMapper().readValue(response.getBody(),
+    // ProductResponseDTO.class);
+    // } else {
+    // throw new ExternalApiException("Produto com ID " + productId + " não
+    // encontrado no inventário.");
+    // }
+
+    // } catch (HttpClientErrorException.NotFound e) {
+    // throw new ExternalApiException("Produto com ID " + productId + " não
+    // encontrado na API de inventário.");
+    // } catch (Exception e) {
+    // throw new ExternalApiException("Erro ao buscar produto na API de inventário:
+    // " + e.getMessage());
+    // }
+    // }
 }
