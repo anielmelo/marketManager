@@ -18,16 +18,17 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+                // hasAuthority("STOCK_KEEPER")
                 return http
                                 .csrf((AbstractHttpConfigurer::disable))
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers(HttpMethod.GET, "/inventory/**").hasAuthority("STOCKKEEPER")
-                                                .requestMatchers(HttpMethod.POST, "/inventory/**").hasAuthority("STOCKKEEPER")
-                                                .requestMatchers(HttpMethod.PUT, "/inventory/**").hasAuthority("STOCKKEEPER")
-                                                .requestMatchers(HttpMethod.DELETE, "/inventory/**").hasAuthority("STOCKKEEPER")
-                                                .requestMatchers(HttpMethod.OPTIONS, "/inventory/**").hasAuthority("STOCKKEEPER")
+                                                .requestMatchers(HttpMethod.GET, "/inventory/**").hasRole("STOCK_KEEPER")
+                                                .requestMatchers(HttpMethod.POST, "/inventory/**").hasRole("STOCK_KEEPER")
+                                                .requestMatchers(HttpMethod.PUT, "/inventory/**").hasRole("STOCK_KEEPER")
+                                                .requestMatchers(HttpMethod.DELETE, "/inventory/**").hasRole("STOCK_KEEPER")
+                                                .requestMatchers(HttpMethod.OPTIONS, "/inventory/**").permitAll()
                                                 .anyRequest().authenticated())
                                 .oauth2ResourceServer(oauth2 -> oauth2
                                                 .jwt(jwt -> jwt.jwtAuthenticationConverter(new JWTConverter())))
