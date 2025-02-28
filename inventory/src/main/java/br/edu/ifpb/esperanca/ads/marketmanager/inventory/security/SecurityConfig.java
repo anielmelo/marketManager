@@ -24,7 +24,7 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers(HttpMethod.GET, "/inventory/**").hasRole("STOCK_KEEPER")
+                                                .requestMatchers(HttpMethod.GET, "/inventory/**").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/inventory/**").hasRole("STOCK_KEEPER")
                                                 .requestMatchers(HttpMethod.PUT, "/inventory/**").hasRole("STOCK_KEEPER")
                                                 .requestMatchers(HttpMethod.DELETE, "/inventory/**").hasRole("STOCK_KEEPER")

@@ -36,7 +36,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
+    // @PreAuthorize("hasAnyRole('STOCK_KEEPER', 'SALE_KEEPER')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         log.info("Fetching product with ID: {}", id);
         var obj = productService.getProductById(id);
