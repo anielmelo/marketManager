@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/suppliers")
+@RequestMapping("/inventory/suppliers")
 public class SupplierController {
     private static final Logger log = LoggerFactory.getLogger(SupplierController.class);
     private final SupplierService supplierService;
