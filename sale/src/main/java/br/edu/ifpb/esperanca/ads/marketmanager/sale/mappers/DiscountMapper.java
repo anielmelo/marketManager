@@ -7,10 +7,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DiscountMapper {
-    public Discount toEntity(DiscountRequestDTO dto) {
+    public Discount toEntity(DiscountRequestDTO dto, String idSaleKeeper) {
         Discount discount = new Discount();
 
         discount.setCode(dto.code());
+        discount.setIdSaleKeeper(idSaleKeeper);
         discount.setDescription(dto.description());
         discount.setValue(dto.value());
         discount.setMinimumValue(dto.minimumValue());
@@ -21,6 +22,7 @@ public class DiscountMapper {
     public DiscountResponseDTO toDiscountResponseDTO(Discount discount) {
         return new DiscountResponseDTO(
                 discount.getId(),
+                discount.getIdSaleKeeper(),
                 discount.getCode(),
                 discount.getDescription(),
                 discount.getValue(),
@@ -28,6 +30,4 @@ public class DiscountMapper {
                 discount.getActive()
         );
     }
-
-
 }
