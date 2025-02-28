@@ -30,15 +30,14 @@ public class ReplacementService {
     }
 
     @Transactional
-    public ReplacementDetailResponseDTO registerNewReplacement(ReplacementRequestDTO dto) {
+    public ReplacementDetailResponseDTO registerNewReplacement(ReplacementRequestDTO dto, String idStockKeeper) {
         log.info("Registering new replacement for product ID: {}", dto.productId());
 
         Product product = productService.findProductById(dto.productId());
-        Replacement replacement = replacementMapper.toEntity(dto, product);
+        Replacement replacement = replacementMapper.toEntity(dto, idStockKeeper, product);
 
         productService.increaseAvailableQuantity(dto.productId(), replacement.getQuantityReceived());
         replacement = replacementRepository.save(replacement);
-
 
         log.info("Replacement registered successfully with ID: {}", replacement.getId());
 
