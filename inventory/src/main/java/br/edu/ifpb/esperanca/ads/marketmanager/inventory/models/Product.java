@@ -1,7 +1,6 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 

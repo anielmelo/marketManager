@@ -15,23 +15,23 @@ public class Replacement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TODO: fazer a implementação do User
-    // private Long idUser;
+    @Column(nullable = false)
+    private String idStockKeeper;
 
     private LocalDateTime date;
-
+    
     private Double purchaseValue;
-
+    
     private int quantityReceived;
-
+    
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     @JsonBackReference
     private Product product;
-
-
+    
+    
     public Replacement() {}
-
+    
     public Replacement(Long id, LocalDateTime date, Double purchaseValue, int quantityReceived, Product product) {
         this.id = id;
         this.date = date;
@@ -39,13 +39,17 @@ public class Replacement implements Serializable {
         this.quantityReceived = quantityReceived;
         this.product = product;
     }
-
+    
     public Long getId() {
         return id;
     }
+    
+    public String getIdStockKeeper() {
+        return idStockKeeper;
+    }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setIdStockKeeper(String idStockKeeper) {
+        this.idStockKeeper = idStockKeeper;
     }
 
     public LocalDateTime getDate() {
