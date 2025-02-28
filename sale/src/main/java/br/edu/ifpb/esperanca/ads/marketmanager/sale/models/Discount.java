@@ -10,14 +10,22 @@ public class Discount implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column( nullable = false)
+
+    @Column(nullable = false)
     private String code;
-    @Column( nullable = false)
+    
+    @Column(nullable = false)
+    private String idSaleKeeper;
+    
+	@Column(nullable = false)
     private String description;
-    @Column( nullable = false)
+    
+    @Column(nullable = false)
     private Double value;
-    @Column( nullable = false)
+    
+    @Column(nullable = false)
     private Double minimumValue;
+    
     private Boolean active;
 
     public Discount() {
@@ -33,11 +41,19 @@ public class Discount implements Serializable {
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
+    
+    public String getIdSaleKeeper() {
+        return idSaleKeeper;
+    }
 
+    public void setIdSaleKeeper(String idSaleKeeper) {
+        this.idSaleKeeper = idSaleKeeper;
+    }
+    
     public String getCode() {
         return code;
     }
