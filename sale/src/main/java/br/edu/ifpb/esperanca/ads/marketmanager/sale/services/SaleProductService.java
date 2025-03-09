@@ -179,29 +179,4 @@ public class SaleProductService {
             throw new ExternalApiException("Erro ao buscar produto na API de inventário: " + e.getMessage());
         }
     }
-
-    // public ProductResponseDTO getProductFromInventory(Long productId) {
-    // String url = "http://localhost:8082/inventory/products/" + productId;
-
-    // try {
-    // ResponseEntity<String> response = restTemplate.getForEntity(url,
-    // String.class);
-
-    // if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null)
-    // {
-    // return new ObjectMapper().readValue(response.getBody(),
-    // ProductResponseDTO.class);
-    // } else {
-    // throw new ExternalApiException("Produto com ID " + productId + " não
-    // encontrado no inventário.");
-    // }
-
-    // } catch (HttpClientErrorException.NotFound e) {
-    // throw new ExternalApiException("Produto com ID " + productId + " não
-    // encontrado na API de inventário.");
-    // } catch (Exception e) {
-    // throw new ExternalApiException("Erro ao buscar produto na API de inventário:
-    // " + e.getMessage());
-    // }
-    // }
 }
