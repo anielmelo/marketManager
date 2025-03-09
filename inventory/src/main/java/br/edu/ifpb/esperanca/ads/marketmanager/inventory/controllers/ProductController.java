@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +26,6 @@ public class ProductController {
     }
 
     @PostMapping()
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<ProductResponseDTO> registerProduct(@Valid @RequestBody ProductRequestDTO product) {
         log.info("Registering new product: {}", product.name());
         var obj = productService.registerNewProduct(product);
@@ -36,7 +34,6 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    // @PreAuthorize("hasAnyRole('STOCK_KEEPER', 'SALE_KEEPER')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         log.info("Fetching product with ID: {}", id);
         var obj = productService.getProductById(id);
@@ -45,7 +42,6 @@ public class ProductController {
     }
 
     @GetMapping()
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
         log.info("Fetching all products");
         var obj = productService.getAllProducts();
@@ -54,7 +50,6 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<ProductResponseDTO> updateProductById(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
         log.info("Updating product with ID: {}", id);
         var obj = productService.updateProduct(id, dto);
@@ -63,7 +58,6 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
         log.info("Deleting product with ID: {}", id);
         productService.deleteProduct(id);
@@ -72,7 +66,6 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}/stock")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<Void> updateStock(@PathVariable Long id, @RequestBody StockUpdateRequestDTO dto) {
         log.info("Updating stock for product ID: {} with quantity: {}", id, dto.quantity());
         productService.updateStockQuantity(id, dto.quantity());

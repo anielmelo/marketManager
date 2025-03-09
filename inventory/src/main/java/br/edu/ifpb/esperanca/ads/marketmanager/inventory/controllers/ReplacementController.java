@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +29,6 @@ public class ReplacementController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<ReplacementDetailResponseDTO> registerNewReplacement(@RequestBody ReplacementRequestDTO dto) {
         log.info("Received request to register new replacement: {}", dto);
 
@@ -49,28 +47,24 @@ public class ReplacementController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<ReplacementDetailResponseDTO> getReplacementById(@PathVariable Long id) {
         log.info("Received request to get replacement by ID: {}", id);
         return ResponseEntity.ok(replacementService.getReplacementById(id));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<List<ReplacementDetailResponseDTO>> getAllReplacements() {
         log.info("Received request to get all replacements");
         return ResponseEntity.ok(replacementService.getAllReplacements());
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<ReplacementDetailResponseDTO> updateReplacement(@PathVariable Long id, @RequestBody ReplacementRequestDTO dto) {
         log.info("Received request to update replacement with ID: {}", id);
         return ResponseEntity.ok(replacementService.updateReplacement(id, dto));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('STOCK_KEEPER')")
     public ResponseEntity<Void> deleteReplacement(@PathVariable Long id) {
         log.info("Received request to delete replacement with ID: {}", id);
         replacementService.deleteReplacement(id);
