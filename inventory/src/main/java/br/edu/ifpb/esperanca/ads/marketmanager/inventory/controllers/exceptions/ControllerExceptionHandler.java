@@ -1,8 +1,8 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.inventory.controllers.exceptions;
 
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InsufficientQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InvalidProductQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.ProductNotFoundException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement.InsufficientQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement.ReplacementNotFoundException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.supplier.SupplierAlreadyExistsException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.supplier.SupplierNotFoundException;

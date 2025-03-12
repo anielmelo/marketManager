@@ -63,6 +63,7 @@ public class SupplierService {
         supplier.setName(dto.name());
         supplier.setCnpj(dto.cnpj());
         supplier.setAddress(dto.address());
+        supplier.setContact(dto.contact());
 
         supplier = supplierRepository.save(supplier);
         log.info("Supplier updated successfully: {}", supplier.getId());

@@ -6,6 +6,7 @@ import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.ReplacementMapp
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Product;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Replacement;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ReplacementRepository;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement.InsufficientQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement.ReplacementNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,8 @@ public class ReplacementService {
     @Transactional
     public ReplacementDetailResponseDTO registerNewReplacement(ReplacementRequestDTO dto, String idStockKeeper) {
         log.info("Registering new replacement for product ID: {}", dto.productId());
+        
+        validateReplacement(dto);
 
         Product product = productService.findProductById(dto.productId());
         Replacement replacement = replacementMapper.toEntity(dto, idStockKeeper, product);
@@ -62,15 +65,25 @@ public class ReplacementService {
         return replacements;
     }
 
+    @Transactional
     public ReplacementDetailResponseDTO updateReplacement(Long id, ReplacementRequestDTO dto) {
         log.info("Updating replacement with ID: {}", id);
+
+        validateReplacement(dto);
+
         Replacement replacement = findReplacementById(id);
+
+        productService.reduceAvailableQuantity(dto.productId(), replacement.getQuantityReceived());
 
         replacement.setQuantityReceived(dto.quantityReceived());
         replacement.setPurchaseValue(dto.totalPurchaseValue());
 
+        productService.increaseAvailableQuantity(dto.productId(), replacement.getQuantityReceived());
+
         replacement = replacementRepository.save(replacement);
+        
         log.info("Replacement updated successfully with ID: {}", replacement.getId());
+
         return replacementMapper.toReplacementDetailResponseDTO(replacement);
     }
 
@@ -92,6 +105,18 @@ public class ReplacementService {
 
     protected List<Replacement> findAllReplacements(Long productId) {
         return productService.findProductById(productId).getReplacement();
+    }
+
+    private void validateReplacement(ReplacementRequestDTO dto) {
+        if (dto.quantityReceived() < 1) {
+            log.warn("Attempt to register a replacement with quantities less than or equal to 0");
+            throw new InsufficientQuantityException();
+        }
+        
+        if (dto.totalPurchaseValue() < 1) {
+            log.warn("Attempt to register a replacement with purchase value less than or equal to 0");
+            throw new InsufficientQuantityException();
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product;
+package br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement;
 
 public class InsufficientQuantityException extends RuntimeException{
     public InsufficientQuantityException() {

@@ -5,9 +5,10 @@ import br.edu.ifpb.esperanca.ads.marketmanager.inventory.dtos.ProductResponseDTO
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.mappers.ProductMapper;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.models.Product;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.repositories.ProductRepository;
-import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InsufficientQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.InvalidProductQuantityException;
 import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.product.ProductNotFoundException;
+import br.edu.ifpb.esperanca.ads.marketmanager.inventory.services.exceptions.replacement.InsufficientQuantityException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ProductService {
 
     public ProductResponseDTO registerNewProduct(ProductRequestDTO dto) {
         log.info("Registering a new product...");
+
         validateProduct(dto);
 
         var supplier = supplierService.findSupplierEntity(dto.supplierId());
@@ -72,12 +74,12 @@ public class ProductService {
 
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
         log.info("Updating product with id: {}", id);
+        
+        validateProduct(dto);
 
         var existingProduct = findProductById(id);
 
         var supplier = supplierService.findSupplierEntity(dto.supplierId());
-
-        validateProduct(dto);
 
         Product updatedProduct = productMapper.toEntity(dto, supplier, replacementService.findAllReplacements(id));
         updatedProduct.setId(existingProduct.getId());
@@ -108,13 +110,6 @@ public class ProductService {
                 productId, product.getAvailableQuantity());
     }
 
-    private void validateProduct(ProductRequestDTO dto) {
-        if (dto.availableQuantity() < 1) {
-            log.warn("Attempt to register a product with quantities less than or equal to 0");
-            throw new InsufficientQuantityException();
-        }
-    }
-
     protected Product findProductById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> {
@@ -130,6 +125,19 @@ public class ProductService {
 
         productRepository.save(product);
     }
+    
+    protected void reduceAvailableQuantity(Long id, int quantity) {
+        Product product = findProductById(id);
 
+        product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
 
+        productRepository.save(product);
+    }
+
+    private void validateProduct(ProductRequestDTO dto) {
+        if (dto.cost() < 1) {
+            log.warn("Attempt to register a replacement with cost less than or equal to 0");
+            throw new InsufficientQuantityException();
+        }
+    }
 }

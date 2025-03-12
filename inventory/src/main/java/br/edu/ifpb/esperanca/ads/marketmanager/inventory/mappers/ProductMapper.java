@@ -17,7 +17,7 @@ public class ProductMapper {
         product.setName(dto.name());
         product.setBrand(dto.brand());
         product.setCost(dto.cost());
-        product.setAvailableQuantity(dto.availableQuantity());
+        product.setAvailableQuantity(0);
         product.setSupplier(supplier);
         product.setReplacement(replacements);
 
