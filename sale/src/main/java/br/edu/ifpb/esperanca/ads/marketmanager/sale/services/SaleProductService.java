@@ -74,7 +74,6 @@ public class SaleProductService {
             }
         }
 
-        // Verifica se os produtos possuem quantidade suficiente no inventário
         for (SaleProductRequestDTO saleProductRequestDTO : saleProductRequestDTOS) {
             ProductResponseDTO productFromInventory = getProductFromInventory(saleProductRequestDTO.productId());
 
@@ -84,28 +83,19 @@ public class SaleProductService {
             }
         }
 
-        // Criando e salvando a venda
         Sale sale = new Sale();
         sale.setDate(LocalDateTime.now());
 
-        // Define o desconto antes de calcular o total
         if (discountId != null) {
-            // Buscando o desconto pelo método findById
             Discount discount = discountRepository.findById(discountId).orElse(null);
 
-            // Se o desconto foi encontrado, associa o desconto à venda
-            // Caso o desconto não seja encontrado, você pode escolher como proceder,
-            // por exemplo, lançar uma exceção ou definir um valor padrão
-            // Lançar uma exceção caso o desconto não exista
-            // throw new DiscountNotFoundException("Desconto não encontrado.");
             sale.setDiscount(discount);
         } else {
-            sale.setDiscount(null); // Caso o discountId seja null, não associa desconto
+            sale.setDiscount(null); 
         }
 
         saleRepository.save(sale);
 
-        // Salvando os produtos da venda
         for (SaleProductRequestDTO saleProductRequestDTO : saleProductRequestDTOS) {
             ProductResponseDTO productFromInventory = getProductFromInventory(saleProductRequestDTO.productId());
 
@@ -121,7 +111,6 @@ public class SaleProductService {
             sale.getProducts().add(saleProduct);
         }
 
-        // Recalcula o total da venda considerando o desconto
         double totalSemDesconto = sale.calcularTotal();
         double totalComDesconto = discountService
                 .applyDiscount(sale.getDiscount() != null ? sale.getDiscount().getId() : null, totalSemDesconto);
@@ -162,7 +151,6 @@ public class SaleProductService {
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 Map<String, Object> body = response.getBody();
 
-                // Constrói o ProductResponseDTO pegando apenas os atributos necessários
                 return new ProductResponseDTO(
                         ((Number) body.get("id")).longValue(),
                         (String) body.get("name"),

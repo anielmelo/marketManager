@@ -39,25 +39,6 @@ public class DiscountController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DiscountRequestDTO> updateDiscount(@PathVariable Long id, @RequestBody DiscountRequestDTO dto) {
-        discountService.updateDiscount(id, dto);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
-        discountService.disableDiscount(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("/disable/{id}")
-    public ResponseEntity<Void> disableDiscount(@PathVariable Long id) {
-        discountService.disableDiscount(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<DiscountResponseDTO> getDiscountById(@PathVariable Long id) {
         return ResponseEntity.ok(discountService.getDiscountById(id));
@@ -67,5 +48,23 @@ public class DiscountController {
     @GetMapping
     public ResponseEntity<List<DiscountResponseDTO>> getAllDiscounts() {
         return ResponseEntity.ok(discountService.getAllDiscounts());
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<DiscountRequestDTO> updateDiscount(@PathVariable Long id, @RequestBody DiscountRequestDTO dto) {
+        discountService.updateDiscount(id, dto);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    
+    @PutMapping("/disable/{id}")
+    public ResponseEntity<Void> disableDiscount(@PathVariable Long id) {
+        discountService.disableDiscount(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteDiscount(@PathVariable Long id) {
+        discountService.disableDiscount(id);
+        return ResponseEntity.noContent().build();
     }
 }

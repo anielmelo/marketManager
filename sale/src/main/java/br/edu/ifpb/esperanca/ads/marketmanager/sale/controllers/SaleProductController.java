@@ -23,22 +23,20 @@ public class SaleProductController {
         this.saleService = saleService;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Void> addProduct(@RequestBody List<SaleProductRequestDTO> products, @RequestParam(required = false)  Long discountId) {
-        // Validar a quantidade dos produtos e verificar se existem no inventário
+    @PostMapping({"/add", "/add/{id}"})
+    public ResponseEntity<Void> addProduct(@RequestBody List<SaleProductRequestDTO> products, @PathVariable(required = false)  Long discountId) {
         for (SaleProductRequestDTO product : products) {
-            // Verifica se o produto existe na API Inventory
             saleProductService.getProductFromInventory(product.productId());
         }
-        // Salva os produtos e aplica o desconto
+
         saleProductService.saveProduct(products, discountId);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @GetMapping("/products/{id}")
-    public ResponseEntity<SaleProductResponseDTO> getSaleProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(saleProductService.getSaleProductById(id));
+    
+    @GetMapping
+    public ResponseEntity<List<SaleResponseDTO>> getAllSales() {
+        return ResponseEntity.ok(saleService.getAllSales());
     }
 
     @GetMapping("/products")
@@ -46,25 +44,26 @@ public class SaleProductController {
         return ResponseEntity.ok(saleProductService.getAllSaleProducts());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SaleResponseDTO> getSaleById(@PathVariable Long id) {
+        return ResponseEntity.ok(saleService.getSaleById(id));
+    }
+    
+    @GetMapping("/products/{id}")
+    public ResponseEntity<SaleProductResponseDTO> getSaleProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(saleProductService.getSaleProductById(id));
+    }
+    
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
+        saleService.deleteSale(id);
+        return ResponseEntity.noContent().build();
+    }
+    
     @DeleteMapping("/products/delete/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         saleProductService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SaleResponseDTO> getSaleById(@PathVariable Long id) {
-        return ResponseEntity.ok(saleService.getSaleById(id));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<SaleResponseDTO>> getAllSales() {
-        return ResponseEntity.ok(saleService.getAllSales());
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
-        saleService.deleteSale(id);
-        return ResponseEntity.noContent().build();
-    }
 }

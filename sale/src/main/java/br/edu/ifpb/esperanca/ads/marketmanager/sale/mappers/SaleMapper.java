@@ -7,6 +7,7 @@ import br.edu.ifpb.esperanca.ads.marketmanager.sale.models.Sale;
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.models.SaleProduct;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,10 @@ public class SaleMapper {
 
     public Sale toEntity(SaleRequestDTO dto, List<SaleProduct> products) {
         Sale sale = new Sale();
-        sale.setDate(dto.date());
+        
+        sale.setDate(LocalDateTime.now());
         sale.setProducts(products);
+
         return sale;
     }
 
