@@ -1,0 +1,801 @@
+{
+	"info": {
+		"_postman_id": "c3baf403-1d74-4871-8d58-08d9a93c554a",
+		"name": "marketmanager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22403898"
+	},
+	"item": [
+		{
+			"name": "authentication",
+			"item": [
+				{
+					"name": "get_token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "gateway",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "aniel",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "aniel",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/realms/marketmanager/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"realms",
+								"marketmanager",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get_token_api",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\r\n//     \"clientId\": \"gateway\",\r\n//     \"username\": \"aniel\",\r\n//     \"password\": \"aniel\",\r\n//     \"grantType\": \"password\"\r\n// }\r\n\r\n{\r\n    \"clientId\": \"gateway\",\r\n    \"username\": \"hugo\",\r\n    \"password\": \"hugo\",\r\n    \"grantType\": \"password\"\r\n}\r\n\r\n// {\r\n//     \"clientId\": \"gateway\",\r\n//     \"username\": \"naclara\",\r\n//     \"password\": \"naclara\",\r\n//     \"grantType\": \"password\"\r\n// }\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/auth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "inventory",
+			"item": [
+				{
+					"name": "CREATE",
+					"item": [
+						{
+							"name": "create_supplier",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Fornecedor Motorola\",\r\n  \"cnpj\": \"12345678000150\",\r\n  \"address\": \"Rua das Flores, 123, São Paulo, SP\",\r\n  \"contact\": \"contato@motorola.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/suppliers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"suppliers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create_product",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Smartphone\",\r\n  \"brand\": \"Motorola\",\r\n  \"cost\": 2500.99,\r\n  \"supplierId\": 6\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/products",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create_replacement",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantityReceived\": 10,\r\n    \"totalPurchaseValue\": 12000.00,\r\n    \"productId\": 7\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/replacements",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"replacements"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "READ",
+					"item": [
+						{
+							"name": "ALL",
+							"item": [
+								{
+									"name": "all_products",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/products",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"products"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all_suppliers",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/suppliers",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"suppliers"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all_replacements",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/replacements",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"replacements"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "BY_ID",
+							"item": [
+								{
+									"name": "product",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/products/6",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"products",
+												"6"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "supplier",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/suppliers/5",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"suppliers",
+												"5"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "replacement",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/inventory/replacements/6",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"inventory",
+												"replacements",
+												"6"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "UPDATE",
+					"item": [
+						{
+							"name": "update_supplier",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Fornecedor Motorola\",\r\n  \"cnpj\": \"12345678000150\",\r\n  \"address\": \"Rua das Flores, 123, São Paulo, SP\",\r\n  \"contact\": \"motorola@motorola.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/suppliers/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"suppliers",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update_product",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"name\": \"Laptop\",\r\n  \"brand\": \"Dell\",\r\n  \"cost\": 7500.99,\r\n  \"supplierId\": 5\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/products/6",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"products",
+										"6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update_replacement",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantityReceived\": 2,\r\n    \"totalPurchaseValue\": 12000.00,\r\n    \"productId\": 7\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/inventory/replacements/8",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"replacements",
+										"8"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "delete_supplier",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/inventory/suppliers/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"suppliers",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_product",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/inventory/products/4",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"products",
+										"4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_replacement",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/inventory/replacements/7",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"inventory",
+										"replacements",
+										"7"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZWFEwWmhITE1zb3FsZ3dsV0FTbzJFRHI2MGxzMVJ6aEtPb2tPc1p5b3Q4In0.eyJleHAiOjE3NDE4MDg3NDMsImlhdCI6MTc0MTgwODQ0MywianRpIjoiM2JmNTI0ZDctYjQ0ZS00YjhiLWEwZmUtODJhZDkxN2IwM2I2IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXJrZXRtYW5hZ2VyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImQ1M2E3OWUwLWMwNTUtNGI5MS1iODJmLTNhNzc4YzU4NzVkMCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImdhdGV3YXkiLCJzZXNzaW9uX3N0YXRlIjoiYWQ1NTI2NTgtZmZjYy00YTU1LTkzMDAtMTE1OTc0NTA5ZDY3IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJkZWZhdWx0LXJvbGVzLW1hcmtldG1hbmFnZXIiLCJTVE9DS19LRUVQRVIiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6InByb2ZpbGUgZW1haWwiLCJzaWQiOiJhZDU1MjY1OC1mZmNjLTRhNTUtOTMwMC0xMTU5NzQ1MDlkNjciLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6Imh1Z28ifQ.j01W5V1LXTmk9E1sckA4mxhNsqbhaWUFHJiCF3McE0wW67pp1yB7MB1qJmhMoJYPnWW4f6Kt9oeNDaJ4gZEbEYeHMExQfF24RWZGj-gK8GBt0bOmxlyUuxCq6cato7hDltuoEd1UIGYHpFfqhluaDmUQUhkOu2gLSHB_OX1u9p6eQG350HXMf8MfmsDERXyzF0rR0xdKUpiuXubF7cWwWgqAjwdUDTE_FDLxgU9jlzal7ivoreBd2O8Nw_hFG9g-aOusKyr3SdPdUmDv9AVyn0hom9wFT8r2Qexrc8kNmCB86QO2x8YzfJ5dT8RRWvppCSA40aGYA4k3-IXDMcHDhA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "sale",
+			"item": [
+				{
+					"name": "CREATE",
+					"item": [
+						{
+							"name": "create_discount",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"PROMO10\",\r\n    \"description\": \"Desconto de 10% para compras acima de R$ 100\",\r\n    \"value\": 10.0,\r\n    \"minimumValue\": 100.0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/sale/discount",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"sale",
+										"discount"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create_sale",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n  {\r\n    \"productId\": 6,\r\n    \"quantity\": 5\r\n  }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/sale/add/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"sale",
+										"add",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "READ",
+					"item": [
+						{
+							"name": "ALL",
+							"item": [
+								{
+									"name": "all_discount",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/sale/discount",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"sale",
+												"discount"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "all_sale",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/sale",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"sale"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "BY_ID",
+							"item": [
+								{
+									"name": "discount",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/sale/discount/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"sale",
+												"discount",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "sale",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://localhost:8000/sale/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "8000",
+											"path": [
+												"sale",
+												"1"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "UPDATE",
+					"item": [
+						{
+							"name": "update_discount",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"code\": \"PROMO20\",\r\n    \"description\": \"Desconto de 20% para compras acima de R$ 200\",\r\n    \"value\": 20.0,\r\n    \"minimumValue\": 100.0\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/sale/discount/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"sale",
+										"discount",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "delete_discount",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/sale/discount/delete/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"sale",
+										"discount",
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete_sale",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/sale/delete/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"sale",
+										"delete",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZWFEwWmhITE1zb3FsZ3dsV0FTbzJFRHI2MGxzMVJ6aEtPb2tPc1p5b3Q4In0.eyJleHAiOjE3NDE3MTY0NjIsImlhdCI6MTc0MTcxNjE2MiwianRpIjoiN2JjZTM0ZWQtNDg0YS00Yzg2LTg2MjQtMDViOWQ1MzZkZTNiIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL3JlYWxtcy9tYXJrZXRtYW5hZ2VyIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6IjY4NDUxMzk3LWJmYjAtNGYyNC1iNTc3LTQ2ZmIzZGRhZDhhZCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImdhdGV3YXkiLCJzZXNzaW9uX3N0YXRlIjoiOGZjY2Y3MzEtMzE3Mi00NDg1LWJmYmUtMzcwMjIyMzdjYTVkIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwMDAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iLCJkZWZhdWx0LXJvbGVzLW1hcmtldG1hbmFnZXIiLCJTQUxFX0tFRVBFUiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoicHJvZmlsZSBlbWFpbCIsInNpZCI6IjhmY2NmNzMxLTMxNzItNDQ4NS1iZmJlLTM3MDIyMjM3Y2E1ZCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoibmFjbGFyYSJ9.CVorcD1RTKuyiWT_nNSJmvDPyNrWQhAF8qna93PIuwlSB2igPVAllTECvzwSGiPbfSoNfD9_Lt2NDUK4STlRFPwxun3sbDKJ6IUcfV1VcLB3NBd_wPNRgu51euTO15beDygtHvdl9p5CUgzVZ5j1S2Paq5do_lfj9L39oRFMMaKZ42DfNAh8FBrurTgFLW3DBa38GYEw4HF5iwzuzhvackfKBvLcKs7JVgY4E3dHhkyy_047IwcZw7KuQkrUfL0Z3Ve4ZsPAUXXLykB3FshtHgU97_OGoOlxc3UpFVoQcoK1qjTouMNG3ff6YEe41tYCJOFaB3i51MGAjpsiVM8-IA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}
