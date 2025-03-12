@@ -1,5 +1,6 @@
 package br.edu.ifpb.esperanca.ads.marketmanager.authentication.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,6 +18,9 @@ import br.edu.ifpb.esperanca.ads.marketmanager.authentication.dto.TokenDTO;
 @RestController
 @RequestMapping("/auth")
 public class TokenController {
+
+    @Value("${app.url_token}")
+    private String url_token;
     
     @PostMapping("/token")
     public ResponseEntity<String> token(@RequestBody TokenDTO tokenDto) {
@@ -33,8 +37,7 @@ public class TokenController {
 
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<MultiValueMap<String, String>>(data, headers);
 
-        var result = rt.postForEntity("http://localhost:8080/realms/marketmanager/protocol/openid-connect/token",
-                entity, String.class);
+        var result = rt.postForEntity(url_token, entity, String.class);
 
         return result;
     }
