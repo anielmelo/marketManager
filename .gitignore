@@ -1,6 +1,9 @@
 .vscode/
 .idea/
 .env
+sale_db_data/
+inventory_db_data/
+
 gateway/src/main/resources/application.yml
 sale/src/main/resources/application.properties
 inventory/src/main/resources/application.properties
