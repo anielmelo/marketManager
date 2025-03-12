@@ -13,6 +13,7 @@ import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.sale.Dup
 import br.edu.ifpb.esperanca.ads.marketmanager.sale.services.exceptions.saleproduct.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -35,6 +36,9 @@ public class SaleProductService {
     private final SaleProductMapper saleProductMapper;
     private final SaleMapper saleMapper;
     private final DiscountRepository discountRepository;
+
+    @Value("${app.url_inventory}")
+    private String url_inventory;
 
     @Autowired
     public SaleProductService(SaleRepository saleRepository, SaleProductRepository saleProductRepository,
@@ -143,7 +147,7 @@ public class SaleProductService {
     }
 
     public ProductResponseDTO getProductFromInventory(Long productId) {
-        String url = "http://localhost:8082/inventory/products/" + productId;
+        String url = url_inventory + productId;
 
         try {
             ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
