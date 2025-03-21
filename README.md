@@ -7,7 +7,7 @@ O *Market Manager* é um sistema desenvolvido para gerenciar vendas e estoque de
 A aplicação permite o controle eficiente de produtos, reposições e vendas, garantindo que todas as operações sejam registradas de forma segura e organizada. A autenticação e autorização dos usuários são gerenciadas pelo **Keycloak**, permitindo a definição de permissões para diferentes tipos de usuários.
 
 ## **Arquitetura**
-
+![componentes](https://github.com/user-attachments/assets/a5349e24-e6b5-446e-ac66-816ceac2f20b)
 > Diagrama de componentes.
 
 
@@ -23,7 +23,7 @@ Os principais componentes incluem:
 O sistema é **containerizado** usando **Docker Compose**, com instâncias do PostgreSQL para armazenamento de dados.
 
 ### **Documentação**
-
+![classe](https://github.com/user-attachments/assets/325076f5-c0f6-4d59-9b5e-84e2519ca077)
 > Diagrama de classe.
 
 
@@ -116,3 +116,7 @@ As credenciais padrão para acesso ao Keycloak são:
 
 - **Usuário:** admin
 - **Senha:** admin
+
+---
+
+### Explore o código e sinta-se à vontade para contribuir ou sugerir melhorias! 🚀
